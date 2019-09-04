@@ -1,0 +1,46 @@
+#docker-compose.yml
+version: '3.3'
+services:
+
+  webmaboss-db:
+    image: mariadb
+    container_name: webmaboss-db
+    restart: always
+    volumes:
+      - ./webmaboss_data/db:/var/lib/mysql
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=webmaboss
+      - MYSQL_USER=webmaboss
+      - MYSQL_PASSWORD=J4*wxQ5sd7F79ZpHHP8*%J#e
+
+  webmaboss:
+    image: vnoel/webmaboss
+    container_name: webmaboss
+    volumes:
+      - ./webmaboss_data/data:/var/webmaboss/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    user: www-data
+    environment:
+      - DB_NAME=webmaboss
+      - DB_USER=webmaboss
+      - DB_PASSWORD=J4*wxQ5sd7F79ZpHHP8*%J#e
+      - DB_HOST=webmaboss-db
+      - DB_PORT=3306
+
+    depends_on:
+      - webmaboss-db
+
+    restart: unless-stopped
+
+  notebook:
+    build:
+      context: ./
+      dockerfile: notebook/Dockerfile
+    container_name: maboss-notebook
+    restart: always
+    volumes:
+      - ./notebook:/notebook:rw
+    ports:
+      - "127.0.0.1:8891:8888"
