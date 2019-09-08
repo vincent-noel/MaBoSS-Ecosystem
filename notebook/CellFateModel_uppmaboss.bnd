@@ -178,5 +178,15 @@ node Survival
 {
   logic = NFkB;
   rate_up = @logic ? $TransRate : 0.0;
-  rate_down = 0.0; 
+  rate_down = Division ? (1E+300) : 0.0; 
+}
+node Division
+{
+  rate_up = Survival ? $DivRate : 0.0;
+  rate_down = 0.0;
+}
+node Death
+{
+  rate_up = (NonACD | Apoptosis) ? 1 : 0.0;
+  rate_down = 0.0;
 }
