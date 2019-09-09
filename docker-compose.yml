@@ -7,7 +7,7 @@ services:
     container_name: webmaboss-db
     restart: always
     volumes:
-      - ./webmaboss_data/db:/var/lib/mysql
+      - db:/var/lib/mysql:rw
     environment:
       - MYSQL_RANDOM_ROOT_PASSWORD=yes
       - MYSQL_DATABASE=webmaboss
@@ -18,10 +18,10 @@ services:
     image: vnoel/webmaboss
     container_name: webmaboss
     volumes:
-      - ./webmaboss_data/data:/var/webmaboss/data
+      - data:/var/webmaboss/data
     ports:
       - "127.0.0.1:8000:8000"
-    user: www-data
+    user: www-data:1000
     environment:
       - DB_NAME=webmaboss
       - DB_USER=webmaboss
@@ -42,5 +42,10 @@ services:
     restart: always
     volumes:
       - ./notebook:/notebook:rw
+      - ./models:/notebook/models:rw
     ports:
       - "127.0.0.1:8891:8888"
+
+volumes:
+  data:
+  db:
